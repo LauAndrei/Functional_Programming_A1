@@ -72,8 +72,11 @@ To handle this:
 
 -}
 toHourlyDataPoints : ApiWeatherData -> List HourlyDataPoint
-toHourlyDataPoints _ =
-    []
+toHourlyDataPoints apiWeatherData =
+    let
+        hourlyData = apiWeatherData.hourly
+    in
+        List.map3 (\x y z -> HourlyDataPoint (Time.millisToPosix x) y z) hourlyData.times hourlyData.temperatures hourlyData.precipitation 
     -- Debug.todo "toHourlyDataPoints"
 
 
@@ -100,8 +103,8 @@ Some relevant functions (see Lab 7 and the [Json.Decode] module documentation fo
 decodeHourlyData : De.Decoder ApiHourlyData
 decodeHourlyData =
     De.map3 ApiHourlyData
-        (De.field "times" (De.list De.int))
-        (De.field "temperatures" (De.list De.float))
+        (De.field "time" (De.list De.int))
+        (De.field "temperature_2m" (De.list De.float))
         (De.field "precipitation" (De.list De.float))
 
 

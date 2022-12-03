@@ -4,6 +4,7 @@ import Html exposing (..)
 import Html.Attributes exposing (class, style)
 import Html.Events exposing (..)
 import Util.Time exposing (Date)
+import Util.Time exposing (formatDate)
 
 
 {-| Don't modify
@@ -24,5 +25,17 @@ Some relevant functions:
 
 -}
 view : DailyData -> Html msg
-view _ =
-    div [] []
+view data =
+    let
+        highTemp = Maybe.withDefault -1000 data.highTemp
+        lowTemp = Maybe.withDefault -1000 data.lowTemp
+    in
+    
+    div [class "day"] 
+    [
+        div [class "day-date"] [text <| formatDate data.date]
+      , div [class "day-hightemp"] [text <| "High: " ++ if highTemp == -1000 then "unavailable" else String.fromFloat highTemp]
+      , div [class "day-lowtemp"] [text <| "Low: " ++ if highTemp == -1000 then "unavailable" else String.fromFloat lowTemp]
+      , div [class "day-precipitation"] [text <| "Total precipitation: " ++ String.fromFloat data.totalPrecipitaion]
+    ]
+    --Debug.todo "Implement View.Day.view"

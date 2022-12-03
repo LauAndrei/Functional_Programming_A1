@@ -70,17 +70,26 @@ maximumBy func list =
 -}
 groupBy : (a -> b) -> List a -> List ( b, List a )
 groupBy func list =
-    let helper x finalList = 
-            let fx = func x
-            in 
-                case finalList of
-                    --[l] -> if(Tuple.first l == fx) then Tuple.second l ++ [x] else [(fx, [x])] ++ finalList
-                    _ -> []
+    let 
+        unique lst =
+            List.foldl (\a uniques -> 
+                        if List.member a uniques then
+                            uniques
+                        else
+                            uniques ++ [a]    
+                    )
+                    []
+                    lst
+        keys = list 
+                |> List.map func
+                |> unique
 
+        group kl lst = 
+            case kl of
+                [] -> []
+                k::ks -> (k, List.filter (\x -> func x == k) lst) :: group ks lst
     in
-    case list of
-    [l] -> [(func l, [l])]
-    _ -> []
+    group keys list
 
 
 
@@ -107,7 +116,6 @@ maybeToList number =
     zipFilter [ True, False, True, False ] [ 1, 2, 3, 4 ] --> [1, 3]
 
 -}
-
 zipFilter : List Bool -> List a -> List a
 zipFilter boolList unfilteredList =
     case (boolList, unfilteredList) of

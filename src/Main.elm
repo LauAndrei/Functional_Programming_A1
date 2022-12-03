@@ -151,8 +151,25 @@ Some relevant functions:
 
 -}
 getChartData : Weather -> View.WeatherChart.ChartData
-getChartData _ =
-    Debug.todo "getChartData"
+getChartData weather =
+    let
+        now = weather.time
+        minTempPoint = weather.weather
+                        |> WeatherData.toHourlyDataPoints
+                        |> Util.minimumBy .temperature
+        
+        maxTempPoint = weather.weather
+                        |> WeatherData.toHourlyDataPoints
+                        |> Util.maximumBy .temperature
+
+        hourlyPoints = weather.weather
+                        |> WeatherData.toHourlyDataPoints
+        
+        hovering = []
+
+        itemsToShow = View.WeatherChart.showAllItems
+    in
+        View.WeatherChart.ChartData now minTempPoint maxTempPoint hourlyPoints hovering itemsToShow
 
 
 {-| Derive (extract) the data required for the weather chart from the state of the app

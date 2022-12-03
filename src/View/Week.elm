@@ -27,7 +27,7 @@ view data =
 
       renderDailyData first last dataList = 
         case dataList of
-            [] -> div [] []
+            [] -> h2[][text "No data"]
             d::ds ->
               if [d] == first then
                 div[class "day"]
